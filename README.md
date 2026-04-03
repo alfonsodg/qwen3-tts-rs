@@ -1,8 +1,27 @@
-# qwen3-tts
+# qwen3-tts-rs (fork)
 
-Pure Rust inference for [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS), a text-to-speech model from Alibaba. Built on [candle](https://github.com/huggingface/candle) — no Python or ONNX runtime required.
+> **Fork of [TrevorS/qwen3-tts-rs](https://github.com/TrevorS/qwen3-tts-rs)** with modifications for concurrent batched inference in [concurrent-faster-qwen3-server](https://github.com/alfonsodg/concurrent-faster-qwen3-server).
 
-All code in this repo was written with [Claude Code](https://claude.ai/code). This is an experiment -- not a production library.
+Pure Rust inference for [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS), a text-to-speech model from Alibaba. Built on [candle](https://github.com/huggingface/candle).
+
+## Modifications from upstream
+
+- `synthesize_batch()` / `synthesize_batch_with_voices()` — batched autoregressive generation (N sequences per GPU forward pass)
+- `generate_acoustic_codes_batched()` — batched code predictor
+- `QuantizedKVCache` (U8) — experimental, disabled by default
+- `get_codec_embedding_batch()` — shape fix (unsqueeze(0) vs unsqueeze(1)) for ICL voice cloning
+- ICL warm-up frame skip (`ref_text_len - 3`) to remove ref_text audio from output
+- ICL KV cache dynamic allocation for long reference text
+- Pre-allocated shared tensors in prefill phase
+- `unsafe impl Send+Sync for Qwen3TTS` for `Arc` sharing across threads
+
+## License
+
+Apache-2.0 (same as upstream). Original work by [TrevorS](https://github.com/TrevorS).
+
+---
+
+*Original README below:*
 
 ## Changelog
 

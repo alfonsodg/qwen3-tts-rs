@@ -78,6 +78,17 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed modifications from upstream.
 
 ## Features
 
+### Added in this fork
+- **Batched autoregressive generation** — N sequences per GPU forward pass (16.59x RT at batch=16)
+- **Batched vocoder decoding** — single ONNX pass for all sequences (+24% throughput)
+- **Batched code predictor** — `generate_acoustic_codes_batched()` for streaming and batch paths
+- **Voice cloning in batch mode** — mixed batches (some clone, some default voice)
+- **ICL voice clone fixes** — shape mismatch fix, warm-up frame skip, KV cache dynamic allocation
+- **Adaptive max_length** — reduces KV cache ~75% for short call center text
+- **QuantizedKVCache U8** — experimental INT8 KV cache (disabled by default)
+- **Thread-safe model** — `Arc<Qwen3TTS>` via `unsafe impl Send+Sync` for concurrent servers
+
+### From upstream (TrevorS/qwen3-tts-rs)
 - **CPU inference** with optional MKL/Accelerate for faster BLAS operations
 - **CUDA** support for NVIDIA GPU acceleration with **bf16** and **Flash Attention 2**
 - **Metal** support for Apple Silicon

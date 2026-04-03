@@ -23,9 +23,25 @@ Apache-2.0 (same as upstream). Original work by [TrevorS](https://github.com/Tre
 
 *Original README below:*
 
-## Changelog
+## Changelog (fork)
 
-### 0.4.0
+See [CHANGELOG.md](CHANGELOG.md) for detailed modifications from upstream.
+
+### Summary of changes
+- Batched autoregressive generation (N sequences per GPU forward pass)
+- Batched code predictor and vocoder decoding
+- Voice cloning in batch mode (mixed batches)
+- ICL voice clone shape fix + warm-up frame skip
+- QuantizedKVCache U8 (experimental)
+- Adaptive max_length for call center text
+- `Arc<Qwen3TTS>` thread safety
+
+### Upstream changelog (TrevorS/qwen3-tts-rs)
+
+<details>
+<summary>Click to expand</summary>
+
+#### 0.4.0
 
 - Pre-allocated KV cache with InplaceOp2 (zero-copy CUDA writes, no Tensor::cat)
 - GPU-side repetition penalty mask (incremental slice_assign, eliminates growing CPU transfer)
@@ -34,7 +50,7 @@ Apache-2.0 (same as upstream). Original work by [TrevorS](https://github.com/Tre
 - GPU→CPU syncs reduced from 3/frame to 1/frame (4-byte EOS check)
 - Non-streaming RTF: 0.48–0.67 across all variants (97-100% of theoretical throughput)
 
-### 0.3.0
+#### 0.3.0
 
 - GPU-side sampling: batched argmax, on-device top-k/top-p/repetition penalty
 - Eliminated 15 of 16 GPU→CPU syncs per frame in code predictor
@@ -42,19 +58,16 @@ Apache-2.0 (same as upstream). Original work by [TrevorS](https://github.com/Tre
 - Tokenizer fallback from vocab.json + merges.txt when tokenizer.json is unavailable
 - Profiling infrastructure: Chrome tracing, flamegraph, Nsight Systems via Makefile
 - Benchmarked all 4 model variants (0.6B Base, 1.7B Base/CustomVoice/VoiceDesign)
-- Self-contained model directories (removed tokenizer symlinks)
-- Enhanced waveform plots with stats annotation bar
 
-### 0.2.0
+#### 0.2.0
 
 - ICL voice cloning now works correctly with proper reference audio
-- Fixed WAV output format (WAVEX/float32 → standard WAV/PCM16) — resolves playback speed issues in some players
+- Fixed WAV output format (WAVEX/float32 → standard WAV/PCM16)
 - Improved tokenizer path resolution with explicit `--tokenizer-dir` override
 - Added benchmarking suite (Criterion micro-benchmarks + E2E speed tests)
 - Automatic resampling of reference audio to 24kHz for voice cloning
-- Docker base image updated to NGC pytorch:25.11 (CUDA 13.0)
 
-Thanks to [u/rngesius](https://www.reddit.com/r/LocalLLaMA/comments/1qqvb79/comment/o2nv6qm/) for feedback on playback speed and tokenizer issues.
+</details>
 
 ## Acknowledgements
 
